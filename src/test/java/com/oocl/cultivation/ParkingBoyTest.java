@@ -4,18 +4,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ParkingBoyTest {
     private ParkingBoy parkingBoy;
     private Car car;
     private ParkingTicket parkingTicket;
+    private ParkingLot parkingLot;
 
     @BeforeEach
     void setUp() {
-        parkingBoy = new ParkingBoy();
+        parkingLot = new ParkingLot();
+        parkingLot.setCapacity(10);
+
         car = new Car();
         parkingTicket = new ParkingTicket();
+        parkingBoy = new ParkingBoy(parkingLot);
     }
 
     @Test
@@ -52,8 +55,9 @@ class ParkingBoyTest {
     @Test
     void should_not_return_a_car_when_parking_boy_fetch_the_car_given_a_wrong_parking_ticket() {
         parkingTicket = parkingBoy.park(car);
+        ParkingTicket wrongParkingTicket = new ParkingTicket();
 
-        Car fetchedCar = parkingBoy.fetch(new ParkingTicket());
+        Car fetchedCar = parkingBoy.fetch(wrongParkingTicket);
 
         assertNull(fetchedCar);
     }
@@ -76,5 +80,16 @@ class ParkingBoyTest {
 
         assertSame(fetchedCar, car);
         assertNull(fetchedCar2);
+    }
+
+    @Test
+    void should_not_return_any_parking_ticket_when_parking_lot_capacity_is_1_and_occupied_given_a_new_car_to_park() {
+        parkingLot.setCapacity(1);
+
+        ParkingTicket parkingTicket1 = parkingBoy.park(new Car());
+        ParkingTicket parkingTicket2 = parkingBoy.park(new Car());
+
+        assertNotNull(parkingTicket1);
+        assertNull(parkingTicket2);
     }
 }
