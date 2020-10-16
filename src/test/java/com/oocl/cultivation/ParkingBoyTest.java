@@ -66,4 +66,15 @@ class ParkingBoyTest {
 
         assertNull(fetchedCar);
     }
+
+    @Test
+    void should_not_return_a_car_when_parking_boy_fetch_a_car_given_the_ticket_have_been_used_already() {
+        parkingTicket = parkingBoy.park(car);
+
+        Car fetchedCar = parkingBoy.fetch(parkingTicket);
+        Car fetchedCar2 = parkingBoy.fetch(parkingTicket);
+
+        assertSame(fetchedCar, car);
+        assertNull(fetchedCar2);
+    }
 }
