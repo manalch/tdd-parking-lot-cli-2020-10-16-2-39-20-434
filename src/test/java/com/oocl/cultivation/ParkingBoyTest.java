@@ -50,10 +50,19 @@ class ParkingBoyTest {
     }
 
     @Test
-    void should__not_return_a_car_when_parking_boy_fetch_the_car_given_a_wrong_parking_ticket() {
+    void should_not_return_a_car_when_parking_boy_fetch_the_car_given_a_wrong_parking_ticket() {
         parkingTicket = parkingBoy.park(car);
 
         Car fetchedCar = parkingBoy.fetch(new ParkingTicket());
+
+        assertNull(fetchedCar);
+    }
+
+    @Test
+    void should_not_return_a_car_when_parking_boy_is_not_given_any_ticket() {
+        parkingTicket = parkingBoy.park(car);
+
+        Car fetchedCar = parkingBoy.fetch(null);
 
         assertNull(fetchedCar);
     }
