@@ -57,9 +57,10 @@ class ParkingBoyTest {
         parkingTicket = parkingBoy.park(car);
         ParkingTicket wrongParkingTicket = new ParkingTicket();
 
-        Car fetchedCar = parkingBoy.fetch(wrongParkingTicket);
-
-        assertNull(fetchedCar);
+        Throwable runtimeException = assertThrows(RuntimeException.class,
+                () -> parkingBoy.fetch(wrongParkingTicket));
+        assertEquals(runtimeException.getMessage()
+                , "Unrecognized Parking Ticket " + wrongParkingTicket.hashCode());
     }
 
     @Test
@@ -76,10 +77,12 @@ class ParkingBoyTest {
         parkingTicket = parkingBoy.park(car);
 
         Car fetchedCar = parkingBoy.fetch(parkingTicket);
-        Car fetchedCar2 = parkingBoy.fetch(parkingTicket);
 
         assertSame(fetchedCar, car);
-        assertNull(fetchedCar2);
+        Throwable runtimeException = assertThrows(RuntimeException.class,
+                () -> parkingBoy.fetch(parkingTicket));
+        assertEquals(runtimeException.getMessage()
+                , "Unrecognized Parking Ticket " + parkingTicket.hashCode());
     }
 
     @Test
