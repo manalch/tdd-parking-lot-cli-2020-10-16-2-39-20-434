@@ -23,6 +23,9 @@ public class ParkingBoy {
     }
 
     public Car fetch(ParkingTicket parkingTicket) {
+        if (!parkingTicketCarMap.containsKey(parkingTicket)){
+            throw new RuntimeException("Unrecognized Parking Ticket " + parkingTicket.hashCode());
+        }
         Car car = parkingTicketCarMap.get(parkingTicket);
         parkingTicketCarMap.remove(parkingTicket);
         parkingLot.fetchCar(car);
