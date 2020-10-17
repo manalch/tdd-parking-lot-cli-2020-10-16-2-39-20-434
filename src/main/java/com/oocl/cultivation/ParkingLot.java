@@ -21,4 +21,12 @@ public class ParkingLot {
     public List<Car> getParkedCars() {
         return parkedCars;
     }
+
+    public void parkCar(Car car) {
+        parkedCars.add(car);
+    }
+
+    public void fetchCar(Car car) {
+        parkedCars.remove(car);
+    }
 }
