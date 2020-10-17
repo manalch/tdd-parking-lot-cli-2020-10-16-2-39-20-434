@@ -2,6 +2,7 @@ package com.oocl.cultivation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ParkingBoy {
     private Map<ParkingTicket, Car> parkingTicketCarMap = new HashMap<>();
@@ -23,6 +24,9 @@ public class ParkingBoy {
     }
 
     public Car fetch(ParkingTicket parkingTicket) {
+        if (Objects.isNull(parkingTicket)){
+            throw new RuntimeException("Please provide your parking ticket");
+        }
         if (!parkingTicketCarMap.containsKey(parkingTicket)){
             throw new RuntimeException("Unrecognized Parking Ticket " + parkingTicket.hashCode());
         }
