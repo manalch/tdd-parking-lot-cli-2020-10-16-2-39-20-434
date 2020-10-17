@@ -67,9 +67,9 @@ class ParkingBoyTest {
     void should_not_return_a_car_when_parking_boy_is_not_given_any_ticket() {
         parkingTicket = parkingBoy.park(car);
 
-        Car fetchedCar = parkingBoy.fetch(null);
-
-        assertNull(fetchedCar);
+        Throwable runtimeException = assertThrows(RuntimeException.class,
+                () -> parkingBoy.fetch(null));
+        assertEquals(runtimeException.getMessage(), "Please provide your parking ticket");
     }
 
     @Test
