@@ -19,20 +19,28 @@ public class ParkingBoy {
         return hasAvailableSlots() ? parkingTicket : null;
     }
 
-    private boolean hasAvailableSlots() {
-        return parkingLot.getParkedCars().size() <= parkingLot.getCapacity();
-    }
-
     public Car fetch(ParkingTicket parkingTicket) {
-        if (Objects.isNull(parkingTicket)){
+        if (hasNoParkingTicket(parkingTicket)){
             throw new RuntimeException("Please provide your parking ticket");
         }
-        if (!parkingTicketCarMap.containsKey(parkingTicket)){
+        if (isUnrecognizedParkingTicket(parkingTicket)){
             throw new RuntimeException("Unrecognized Parking Ticket " + parkingTicket.hashCode());
         }
         Car car = parkingTicketCarMap.get(parkingTicket);
         parkingTicketCarMap.remove(parkingTicket);
         parkingLot.fetchCar(car);
         return car;
+    }
+
+    private boolean hasAvailableSlots() {
+        return parkingLot.getParkedCars().size() <= parkingLot.getCapacity();
+    }
+
+    private boolean isUnrecognizedParkingTicket(ParkingTicket parkingTicket) {
+        return !parkingTicketCarMap.containsKey(parkingTicket);
+    }
+
+    private boolean hasNoParkingTicket(ParkingTicket parkingTicket) {
+        return Objects.isNull(parkingTicket);
     }
 }
