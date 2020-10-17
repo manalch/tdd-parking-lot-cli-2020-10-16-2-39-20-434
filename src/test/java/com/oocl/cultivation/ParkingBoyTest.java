@@ -90,9 +90,8 @@ class ParkingBoyTest {
         parkingLot.setCapacity(1);
 
         ParkingTicket parkingTicket1 = parkingBoy.park(new Car());
-        ParkingTicket parkingTicket2 = parkingBoy.park(new Car());
-
         assertNotNull(parkingTicket1);
-        assertNull(parkingTicket2);
+        Throwable runtimeException = assertThrows(RuntimeException.class, () -> parkingBoy.park(new Car()));
+        assertEquals(runtimeException.getMessage(), "Not enough position");
     }
 }
