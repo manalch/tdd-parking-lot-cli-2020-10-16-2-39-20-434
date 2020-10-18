@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +22,7 @@ class ParkingBoyTest {
 
         car = new Car();
         parkingTicket = new ParkingTicket();
-        parkingBoy = new ParkingBoy(parkingLot);
+        parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
     }
 
     @Test
@@ -60,19 +61,20 @@ class ParkingBoyTest {
         parkingTicket = parkingBoy.park(car);
         ParkingTicket wrongParkingTicket = new ParkingTicket();
 
-        Throwable runtimeException = assertThrows(RuntimeException.class,
-                () -> parkingBoy.fetch(wrongParkingTicket));
-        assertEquals(runtimeException.getMessage()
-                , "Unrecognized Parking Ticket " + wrongParkingTicket.hashCode());
+        Throwable runtimeException = assertThrows(RuntimeException.class
+                , () -> parkingBoy.fetch(wrongParkingTicket));
+        assertEquals("Unrecognized Parking Ticket " + wrongParkingTicket.hashCode()
+                , runtimeException.getMessage());
     }
 
     @Test
     void should_not_return_a_car_when_parking_boy_is_not_given_any_ticket() {
         parkingTicket = parkingBoy.park(car);
 
-        Throwable runtimeException = assertThrows(RuntimeException.class,
-                () -> parkingBoy.fetch(null));
-        assertEquals(runtimeException.getMessage(), "Please provide your parking ticket");
+        Throwable runtimeException = assertThrows(RuntimeException.class
+                , () -> parkingBoy.fetch(null));
+        assertEquals("Please provide your parking ticket"
+                , runtimeException.getMessage());
     }
 
     @Test
@@ -82,20 +84,22 @@ class ParkingBoyTest {
         Car fetchedCar = parkingBoy.fetch(parkingTicket);
 
         assertSame(fetchedCar, car);
-        Throwable runtimeException = assertThrows(RuntimeException.class,
-                () -> parkingBoy.fetch(parkingTicket));
-        assertEquals(runtimeException.getMessage()
-                , "Unrecognized Parking Ticket " + parkingTicket.hashCode());
+        Throwable runtimeException = assertThrows(RuntimeException.class
+                , () -> parkingBoy.fetch(parkingTicket));
+        assertEquals("Unrecognized Parking Ticket " + parkingTicket.hashCode()
+                , runtimeException.getMessage());
     }
 
     @Test
     void should_not_return_any_parking_ticket_when_parking_lot_capacity_is_1_and_occupied_given_a_new_car_to_park() {
         parkingLot.setCapacity(1);
 
-        ParkingTicket parkingTicket1 = parkingBoy.park(new Car());
-        assertNotNull(parkingTicket1);
-        Throwable runtimeException = assertThrows(RuntimeException.class, () -> parkingBoy.park(new Car()));
-        assertEquals(runtimeException.getMessage(), "Not enough position");
+        ParkingTicket parkingTicket = parkingBoy.park(new Car());
+        assertNotNull(parkingTicket);
+        Throwable runtimeException = assertThrows(RuntimeException.class
+                , () -> parkingBoy.park(new Car()));
+        assertEquals("Not enough position"
+                , runtimeException.getMessage());
     }
 
     @Test
@@ -123,8 +127,8 @@ class ParkingBoyTest {
         Car car2 = new Car();
         Car car3 = new Car();
         ParkingLot parkingLot1 = new ParkingLot();
-        parkingLot1.setCapacity(1);
         ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(1);
         parkingLot2.setCapacity(5);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new ParkingBoy(assignedParkingLots);
@@ -154,29 +158,29 @@ class ParkingBoyTest {
         Car car2 = new Car();
         Car car3 = new Car();
         ParkingLot parkingLot1 = new ParkingLot();
-        parkingLot1.setCapacity(1);
         ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(1);
         parkingLot2.setCapacity(1);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new ParkingBoy(assignedParkingLots);
 
         ParkingTicket parkingTicket1 = parkingBoy.park(car1);
-        assertNotNull(parkingTicket1);
-
         ParkingTicket parkingTicket2 = parkingBoy.park(car2);
-        assertNotNull(parkingTicket2);
-
-        assertFalse(parkingLot1.getParkedCars().contains(car2));
-        assertFalse(parkingLot2.getParkedCars().contains(car1));
-
-        assertTrue(parkingLot1.getParkedCars().contains(car1));
-        assertTrue(parkingLot2.getParkedCars().contains(car2));
-
-        Throwable runtimeException = assertThrows(RuntimeException.class, () -> parkingBoy.park(car3));
-        assertEquals(runtimeException.getMessage(), "Not enough position");
 
         parkingLot1 = parkingBoy.getParkingLots().get(0);
         parkingLot2 = parkingBoy.getParkingLots().get(1);
+
+        assertNotNull(parkingTicket1);
+        assertNotNull(parkingTicket2);
+        assertFalse(parkingLot1.getParkedCars().contains(car2));
+        assertFalse(parkingLot2.getParkedCars().contains(car1));
+        assertTrue(parkingLot1.getParkedCars().contains(car1));
+        assertTrue(parkingLot2.getParkedCars().contains(car2));
+
+        Throwable runtimeException = assertThrows(RuntimeException.class
+                , () -> parkingBoy.park(car3));
+        assertEquals("Not enough position"
+                , runtimeException.getMessage());
 
         assertFalse(parkingLot1.getParkedCars().contains(car3));
         assertFalse(parkingLot2.getParkedCars().contains(car3));
