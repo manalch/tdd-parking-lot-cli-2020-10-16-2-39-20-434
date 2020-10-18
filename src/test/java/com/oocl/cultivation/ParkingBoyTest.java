@@ -143,9 +143,9 @@ class ParkingBoyTest {
         assertNotNull(parkingTicket2);
         assertNotNull(parkingTicket3);
 
-        assertFalse(parkingLot1.getParkedCars().contains(car3));
-        assertFalse(parkingLot1.getParkedCars().contains(car2));
         assertFalse(parkingLot2.getParkedCars().contains(car1));
+        assertFalse(parkingLot1.getParkedCars().contains(car2));
+        assertFalse(parkingLot1.getParkedCars().contains(car3));
 
         assertTrue(parkingLot1.getParkedCars().contains(car1));
         assertTrue(parkingLot2.getParkedCars().contains(car2));
@@ -172,8 +172,110 @@ class ParkingBoyTest {
 
         assertNotNull(parkingTicket1);
         assertNotNull(parkingTicket2);
-        assertFalse(parkingLot1.getParkedCars().contains(car2));
+
         assertFalse(parkingLot2.getParkedCars().contains(car1));
+        assertFalse(parkingLot1.getParkedCars().contains(car2));
+
+        assertTrue(parkingLot1.getParkedCars().contains(car1));
+        assertTrue(parkingLot2.getParkedCars().contains(car2));
+
+        Throwable runtimeException = assertThrows(RuntimeException.class
+                , () -> parkingBoy.park(car3));
+        assertEquals("Not enough position"
+                , runtimeException.getMessage());
+
+        assertFalse(parkingLot1.getParkedCars().contains(car3));
+        assertFalse(parkingLot2.getParkedCars().contains(car3));
+    }
+
+    @Test
+    void should_park_cars_into_more_capacity_parking_lot_when_smart_parking_boy_park_a_car_given_two_parking_lots() {
+        Car car1 = new Car();
+        Car car2 = new Car();
+        Car car3 = new Car();
+        ParkingLot parkingLot1 = new ParkingLot();
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(2);
+        parkingLot2.setCapacity(2);
+        List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
+        parkingBoy = new SmartParkingBoy(assignedParkingLots);
+
+        ParkingTicket parkingTicket1 = parkingBoy.park(car1);
+        ParkingTicket parkingTicket2 = parkingBoy.park(car2);
+        ParkingTicket parkingTicket3 = parkingBoy.park(car3);
+
+        parkingLot1 = parkingBoy.getParkingLots().get(0);
+        parkingLot2 = parkingBoy.getParkingLots().get(1);
+
+        assertNotNull(parkingTicket1);
+        assertNotNull(parkingTicket2);
+        assertNotNull(parkingTicket3);
+
+        assertFalse(parkingLot2.getParkedCars().contains(car1));
+        assertFalse(parkingLot1.getParkedCars().contains(car2));
+        assertFalse(parkingLot2.getParkedCars().contains(car3));
+
+        assertTrue(parkingLot1.getParkedCars().contains(car1));
+        assertTrue(parkingLot2.getParkedCars().contains(car2));
+        assertTrue(parkingLot1.getParkedCars().contains(car3));
+    }
+
+    @Test
+    void should_park_all_cars_to_parking_lot2_when_smart_parking_boy_park_a_car_given_parking_lot1_capacity_is_2_and_parking_lot2_capacity_is_10() {
+        Car car1 = new Car();
+        Car car2 = new Car();
+        Car car3 = new Car();
+        ParkingLot parkingLot1 = new ParkingLot();
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(2);
+        parkingLot2.setCapacity(10);
+        List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
+        parkingBoy = new SmartParkingBoy(assignedParkingLots);
+
+        ParkingTicket parkingTicket1 = parkingBoy.park(car1);
+        ParkingTicket parkingTicket2 = parkingBoy.park(car2);
+        ParkingTicket parkingTicket3 = parkingBoy.park(car3);
+
+        parkingLot1 = parkingBoy.getParkingLots().get(0);
+        parkingLot2 = parkingBoy.getParkingLots().get(1);
+
+        assertNotNull(parkingTicket1);
+        assertNotNull(parkingTicket2);
+        assertNotNull(parkingTicket3);
+
+        assertFalse(parkingLot1.getParkedCars().contains(car1));
+        assertFalse(parkingLot1.getParkedCars().contains(car2));
+        assertFalse(parkingLot1.getParkedCars().contains(car3));
+
+        assertTrue(parkingLot2.getParkedCars().contains(car1));
+        assertTrue(parkingLot2.getParkedCars().contains(car2));
+        assertTrue(parkingLot2.getParkedCars().contains(car3));
+    }
+
+    @Test
+    void should_not_park_when_smart_parking_boy_park_the_car_given_a_car_and_parking_lot1_and_parking_lot2_is_full() {
+        Car car1 = new Car();
+        Car car2 = new Car();
+        Car car3 = new Car();
+        ParkingLot parkingLot1 = new ParkingLot();
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(1);
+        parkingLot2.setCapacity(1);
+        List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
+        parkingBoy = new SmartParkingBoy(assignedParkingLots);
+
+        ParkingTicket parkingTicket1 = parkingBoy.park(car1);
+        ParkingTicket parkingTicket2 = parkingBoy.park(car2);
+
+        parkingLot1 = parkingBoy.getParkingLots().get(0);
+        parkingLot2 = parkingBoy.getParkingLots().get(1);
+
+        assertNotNull(parkingTicket1);
+        assertNotNull(parkingTicket2);
+
+        assertFalse(parkingLot2.getParkedCars().contains(car1));
+        assertFalse(parkingLot1.getParkedCars().contains(car2));
+
         assertTrue(parkingLot1.getParkedCars().contains(car1));
         assertTrue(parkingLot2.getParkedCars().contains(car2));
 
