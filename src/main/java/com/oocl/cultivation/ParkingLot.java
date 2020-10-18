@@ -22,6 +22,10 @@ public class ParkingLot {
         return parkedCars;
     }
 
+    public int getAvailableParkingLotCount() {
+        return capacity - parkedCars.size();
+    }
+
     public void addCar(Car car) {
         parkedCars.add(car);
     }

@@ -1,8 +1,11 @@
 package com.oocl.cultivation;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-public class ParkingBoy {
+public class ParkingBoy implements IParkingStrategy {
     private Map<ParkingTicket, Car> parkingTicketCarMap = new HashMap<>();
     private List<ParkingLot> parkingLots;
 
@@ -10,11 +13,17 @@ public class ParkingBoy {
         this.parkingLots = parkingLots;
     }
 
-    public ParkingTicket park(Car car) {
+    public Map<ParkingTicket, Car> getParkingTicketCarMap() {
+        return parkingTicketCarMap;
+    }
+
+    public List<ParkingLot> getParkingLots() {
+        return parkingLots;
+    }
+
+    @Override
+    public ParkingTicket parkCar(Car car) {
         ParkingLot parkingLot = getAvailableParkingLot();
-        if (Objects.isNull(parkingLot)){
-            throw new RuntimeException("Not enough position");
-        }
         ParkingTicket parkingTicket = new ParkingTicket();
         parkingTicketCarMap.put(parkingTicket, car);
         parkingLot.addCar(car);
@@ -22,26 +31,36 @@ public class ParkingBoy {
         return parkingTicket;
     }
 
-    public Car fetch(ParkingTicket parkingTicket) {
-        if (hasNoParkingTicket(parkingTicket)){
+    @Override
+    public ParkingLot getAvailableParkingLot() {
+        return parkingLots.stream()
+                .filter(parkingLot -> parkingLot.getAvailableParkingLotCount() > 0)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Not enough position"));
+    }
+
+    public Car fetchCar(ParkingTicket parkingTicket) {
+        if (hasNoParkingTicket(parkingTicket)) {
             throw new RuntimeException("Please provide your parking ticket");
         }
-        if (isUnrecognizedParkingTicket(parkingTicket)){
+        return getCarFromParkingLot(parkingTicket);
+    }
+
+    private Car getCarFromParkingLot(ParkingTicket parkingTicket) {
+        if (isUnrecognizedParkingTicket(parkingTicket)) {
             throw new RuntimeException("Unrecognized Parking Ticket " + parkingTicket.hashCode());
         }
         Car car = parkingTicketCarMap.get(parkingTicket);
+
+        ParkingLot parkingLot = parkingLots.stream()
+                .filter(lot -> lot.getParkedCars().contains(car))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("Your car is missing"));
+
         parkingTicketCarMap.remove(parkingTicket);
-        removeCarFromParkingLot(car);
+        parkingLot.removeCar(car);
 
         return car;
-    }
-
-    public List<ParkingLot> getParkingLots() {
-        return parkingLots;
-    }
-
-    private boolean hasAvailableParkingLot(ParkingLot parkingLot) {
-        return parkingLot.getParkedCars().size() < parkingLot.getCapacity();
     }
 
     private boolean isUnrecognizedParkingTicket(ParkingTicket parkingTicket) {
@@ -50,18 +69,5 @@ public class ParkingBoy {
 
     private boolean hasNoParkingTicket(ParkingTicket parkingTicket) {
         return Objects.isNull(parkingTicket);
-    }
-
-    private ParkingLot getAvailableParkingLot(){
-        return parkingLots.stream()
-                .filter(this::hasAvailableParkingLot)
-                .findFirst()
-                .orElse(null);
-    }
-
-    private void removeCarFromParkingLot(Car car) {
-        parkingLots.stream()
-                .filter(lot -> lot.getParkedCars().contains(car))
-                .forEach(parkingLot -> parkingLot.removeCar(car));
     }
 }
