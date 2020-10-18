@@ -13,14 +13,6 @@ public class ParkingBoy implements IParkingStrategy {
         this.parkingLots = parkingLots;
     }
 
-    public Map<ParkingTicket, Car> getParkingTicketCarMap() {
-        return parkingTicketCarMap;
-    }
-
-    public List<ParkingLot> getParkingLots() {
-        return parkingLots;
-    }
-
     @Override
     public ParkingTicket parkCar(Car car) {
         ParkingLot parkingLot = getAvailableParkingLot();
@@ -69,5 +61,13 @@ public class ParkingBoy implements IParkingStrategy {
 
     private boolean hasNoParkingTicket(ParkingTicket parkingTicket) {
         return Objects.isNull(parkingTicket);
+    }
+
+    public List<ParkingLot> getParkingLots() {
+        return parkingLots;
+    }
+
+    public Map<ParkingTicket, Car> getParkingTicketCarMap() {
+        return parkingTicketCarMap;
     }
 }
