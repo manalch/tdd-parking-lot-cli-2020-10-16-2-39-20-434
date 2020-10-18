@@ -312,4 +312,122 @@ class ParkingBoyTest {
         assertFalse(parkingLot2.getParkedCars().contains(car1));
         assertTrue(parkingLot2.getParkedCars().contains(car2));
     }
+
+    @Test
+    void should_park_to_parking_lot_1_when_parking_boy_park_a_car_given_that_parking_lot_1_has_higher_position_rate() {
+        Car car1 = new Car();
+        ParkingLot parkingLot1 = new ParkingLot();
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(15);
+        parkingLot2.setCapacity(20);
+        setInitiallyParkedCars(parkingLot1, 3);
+        setInitiallyParkedCars(parkingLot2, 5);
+        List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
+        parkingBoy = new SuperSmartParkingBoy(assignedParkingLots);
+
+        ParkingTicket parkingTicket = parkingBoy.parkCar(car1);
+
+        parkingLot1 = parkingBoy.getParkingLots().get(0);
+        parkingLot2 = parkingBoy.getParkingLots().get(1);
+
+        assertNotNull(parkingTicket);
+        assertTrue(parkingLot1.getParkedCars().contains(car1));
+        assertFalse(parkingLot2.getParkedCars().contains(car1));
+    }
+
+    @Test
+    void should_park_to_parking_lot_1_when_parking_boy_park_a_car_given_that_parking_lot_1_has_the_same_position_rate() {
+        Car car1 = new Car();
+        ParkingLot parkingLot1 = new ParkingLot();
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(15);
+        parkingLot2.setCapacity(30);
+        setInitiallyParkedCars(parkingLot1, 5);
+        setInitiallyParkedCars(parkingLot2, 10);
+        List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
+        parkingBoy = new SuperSmartParkingBoy(assignedParkingLots);
+
+        ParkingTicket parkingTicket = parkingBoy.parkCar(car1);
+
+        parkingLot1 = parkingBoy.getParkingLots().get(0);
+        parkingLot2 = parkingBoy.getParkingLots().get(1);
+
+        assertNotNull(parkingTicket);
+        assertTrue(parkingLot1.getParkedCars().contains(car1));
+        assertFalse(parkingLot2.getParkedCars().contains(car1));
+    }
+
+    @Test
+    void should_park_to_parking_lot_2_when_parking_boy_park_a_car_given_that_parking_lot_2_has_higher_position_rate() {
+        Car car1 = new Car();
+        ParkingLot parkingLot1 = new ParkingLot();
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(5);
+        parkingLot2.setCapacity(10);
+        setInitiallyParkedCars(parkingLot1, 3);
+        setInitiallyParkedCars(parkingLot2, 2);
+        List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
+        parkingBoy = new SuperSmartParkingBoy(assignedParkingLots);
+
+        ParkingTicket parkingTicket = parkingBoy.parkCar(car1);
+
+        parkingLot1 = parkingBoy.getParkingLots().get(0);
+        parkingLot2 = parkingBoy.getParkingLots().get(1);
+
+        assertNotNull(parkingTicket);
+        assertFalse(parkingLot1.getParkedCars().contains(car1));
+        assertTrue(parkingLot2.getParkedCars().contains(car1));
+    }
+
+    @Test
+    void should_not_park_when_super_smart_parking_boy_park_a_car_given_that_both_parking_lot1_and_parking_lot2_is_full() {
+        Car car1 = new Car();
+        ParkingLot parkingLot1 = new ParkingLot();
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(5);
+        parkingLot2.setCapacity(10);
+        setInitiallyParkedCars(parkingLot1, 3);
+        setInitiallyParkedCars(parkingLot2, 2);
+        List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
+        parkingBoy = new SuperSmartParkingBoy(assignedParkingLots);
+
+        ParkingTicket parkingTicket = parkingBoy.parkCar(car1);
+
+        parkingLot1 = parkingBoy.getParkingLots().get(0);
+        parkingLot2 = parkingBoy.getParkingLots().get(1);
+
+        assertNotNull(parkingTicket);
+        assertFalse(parkingLot1.getParkedCars().contains(car1));
+        assertTrue(parkingLot2.getParkedCars().contains(car1));
+    }
+
+    @Test
+    void name() {
+        Car car1 = new Car();
+        ParkingLot parkingLot1 = new ParkingLot();
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(10);
+        parkingLot2.setCapacity(20);
+        setInitiallyParkedCars(parkingLot1, 10);
+        setInitiallyParkedCars(parkingLot2, 20);
+        List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
+        parkingBoy = new SuperSmartParkingBoy(assignedParkingLots);
+
+        parkingLot1 = parkingBoy.getParkingLots().get(0);
+        parkingLot2 = parkingBoy.getParkingLots().get(1);
+
+        Throwable runtimeException = assertThrows(RuntimeException.class
+                , () -> parkingBoy.parkCar(car1));
+        assertEquals("Not enough position"
+                , runtimeException.getMessage());
+
+        assertFalse(parkingLot1.getParkedCars().contains(car1));
+        assertFalse(parkingLot2.getParkedCars().contains(car1));
+    }
+
+    private void setInitiallyParkedCars(ParkingLot parkingLot, int numberOfCarsParked) {
+        for (int i = 0; i < numberOfCarsParked; i++) {
+            parkingLot.addCar(new Car());
+        }
+    }
 }
