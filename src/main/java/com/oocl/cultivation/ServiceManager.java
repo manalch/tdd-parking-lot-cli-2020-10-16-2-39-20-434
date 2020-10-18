@@ -3,7 +3,8 @@ package com.oocl.cultivation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceManager extends ParkingBoy implements IParkingStrategy {
+public class ServiceManager extends ParkingBoy {
+
     private List<ParkingBoy> managementList = new ArrayList<>();
 
     public ServiceManager(List<ParkingLot> parkingLots) {
@@ -22,6 +23,6 @@ public class ServiceManager extends ParkingBoy implements IParkingStrategy {
         return managementList.stream()
                 .filter(parkingBoy -> parkingBoy.equals(assignedParkingBoy))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Parking boy is not in the management list"));
+                .orElseThrow(RuntimeException::new);
     }
 }

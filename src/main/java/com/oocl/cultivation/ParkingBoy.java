@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ParkingBoy implements IParkingStrategy {
+
     private Map<ParkingTicket, Car> parkingTicketCarMap = new HashMap<>();
     private List<ParkingLot> parkingLots;
 

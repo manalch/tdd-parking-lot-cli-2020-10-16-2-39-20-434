@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingLot {
+
     private Integer capacity;
     private List<Car> parkedCars = new ArrayList<>();
 

@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SuperSmartParkingBoy extends ParkingBoy implements IParkingStrategy {
+
     public SuperSmartParkingBoy(List<ParkingLot> parkingLots) {
         super(parkingLots);
     }

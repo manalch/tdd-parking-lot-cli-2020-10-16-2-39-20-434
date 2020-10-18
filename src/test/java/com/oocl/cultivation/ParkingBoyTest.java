@@ -10,19 +10,82 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ParkingBoyTest {
+
     private ParkingBoy parkingBoy;
     private Car car;
     private ParkingTicket parkingTicket;
     private ParkingLot parkingLot;
+    private ParkingLot parkingLot1;
+    private ParkingLot parkingLot2;
+    private Car car1;
+    private Car car2;
+    private Car car3;
+    private ParkingLot standardParkingBoyParkingLot1;
+    private ParkingLot standardParkingBoyParkingLot2;
+    private ParkingLot smartParkingBoyParkingLot1;
+    private ParkingLot smartParkingBoyParkingLot2;
+    private ParkingLot superSmartParkingBoyParkingLot1;
+    private ParkingLot superSmartParkingBoyParkingLot2;
+    private ParkingLot serviceManagerParkingLot1;
+    private ParkingLot serviceManagerParkingLot2;
+    private ServiceManager serviceManager;
+    private ParkingBoy standardParkingBoy;
+    private ParkingBoy smartParkingBoy;
+    private ParkingBoy superSmartParkingBoy;
 
     @BeforeEach
     void setUp() {
         parkingLot = new ParkingLot();
+        parkingLot1 = new ParkingLot();
+        parkingLot2 = new ParkingLot();
         parkingLot.setCapacity(10);
 
         car = new Car();
+        car1 = new Car();
+        car2 = new Car();
+        car3 = new Car();
+
         parkingTicket = new ParkingTicket();
         parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
+
+        standardParkingBoyParkingLot1 = new ParkingLot();
+        standardParkingBoyParkingLot2 = new ParkingLot();
+        smartParkingBoyParkingLot1 = new ParkingLot();
+        smartParkingBoyParkingLot2 = new ParkingLot();
+        superSmartParkingBoyParkingLot1 = new ParkingLot();
+        superSmartParkingBoyParkingLot2 = new ParkingLot();
+        serviceManagerParkingLot1 = new ParkingLot();
+        serviceManagerParkingLot2 = new ParkingLot();
+
+        standardParkingBoyParkingLot1.setCapacity(10);
+        standardParkingBoyParkingLot1.setCapacity(10);
+
+        smartParkingBoyParkingLot1.setCapacity(20);
+        smartParkingBoyParkingLot2.setCapacity(20);
+
+        superSmartParkingBoyParkingLot1.setCapacity(30);
+        superSmartParkingBoyParkingLot1.setCapacity(30);
+
+        serviceManagerParkingLot1.setCapacity(40);
+        serviceManagerParkingLot2.setCapacity(40);
+
+        List<ParkingLot> assignedParkingLotsToStandardParkingBoy = Arrays.asList(standardParkingBoyParkingLot1
+                , standardParkingBoyParkingLot2);
+        List<ParkingLot> assignedParkingLotsToSmartParkingBoy = Arrays.asList(smartParkingBoyParkingLot1
+                , smartParkingBoyParkingLot2);
+        List<ParkingLot> assignedParkingLotsToSuperSmartParkingBoy = Arrays.asList(superSmartParkingBoyParkingLot1
+                , superSmartParkingBoyParkingLot2);
+        List<ParkingLot> assignedParkingLotsToServiceManager = Arrays.asList(serviceManagerParkingLot1
+                , serviceManagerParkingLot2);
+
+        serviceManager = new ServiceManager(assignedParkingLotsToServiceManager);
+        standardParkingBoy = new ParkingBoy(assignedParkingLotsToStandardParkingBoy);
+        smartParkingBoy = new SmartParkingBoy(assignedParkingLotsToSmartParkingBoy);
+        superSmartParkingBoy = new SuperSmartParkingBoy(assignedParkingLotsToSuperSmartParkingBoy);
+
+        serviceManager.addParkingBoyToManagementList(Arrays.asList(standardParkingBoy
+                , smartParkingBoy
+                , superSmartParkingBoy));
     }
 
     @Test
@@ -104,9 +167,7 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_lot_1_when_parking_boy_park_the_car_given_a_car_and_parking_lot1_is_not_yet_full() {
-        ParkingLot parkingLot1 = new ParkingLot();
         parkingLot1.setCapacity(10);
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot2.setCapacity(10);
 
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -123,11 +184,6 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_lot_2_when_parking_boy_park_the_car_given_a_car_and_parking_lot1_is_full_and_parking_lot2_is_not_full() {
-        Car car1 = new Car();
-        Car car2 = new Car();
-        Car car3 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(1);
         parkingLot2.setCapacity(5);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -154,11 +210,6 @@ class ParkingBoyTest {
 
     @Test
     void should_not_park_when_parking_boy_park_the_car_given_a_car_and_parking_lot1_and_parking_lot2_is_full() {
-        Car car1 = new Car();
-        Car car2 = new Car();
-        Car car3 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(1);
         parkingLot2.setCapacity(1);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -190,11 +241,6 @@ class ParkingBoyTest {
 
     @Test
     void should_park_cars_into_more_capacity_parking_lot_when_smart_parking_boy_park_a_car_given_two_parking_lots() {
-        Car car1 = new Car();
-        Car car2 = new Car();
-        Car car3 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(2);
         parkingLot2.setCapacity(2);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -222,11 +268,6 @@ class ParkingBoyTest {
 
     @Test
     void should_park_all_cars_to_parking_lot2_when_smart_parking_boy_park_a_car_given_parking_lot1_capacity_is_2_and_parking_lot2_capacity_is_10() {
-        Car car1 = new Car();
-        Car car2 = new Car();
-        Car car3 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(2);
         parkingLot2.setCapacity(10);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -254,11 +295,6 @@ class ParkingBoyTest {
 
     @Test
     void should_not_park_when_smart_parking_boy_park_the_car_given_a_car_and_parking_lot1_and_parking_lot2_is_full() {
-        Car car1 = new Car();
-        Car car2 = new Car();
-        Car car3 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(1);
         parkingLot2.setCapacity(1);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -290,10 +326,6 @@ class ParkingBoyTest {
 
     @Test
     void should_return_car_when_smart_parking_boy_fetch_the_car_on_the_parking_lot_it_is_parked_given_a_parking_ticket() {
-        Car car1 = new Car();
-        Car car2 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(10);
         parkingLot2.setCapacity(20);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -315,9 +347,6 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_parking_lot_1_when_parking_boy_park_a_car_given_that_parking_lot_1_has_higher_position_rate() {
-        Car car1 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(15);
         parkingLot2.setCapacity(20);
         setInitiallyParkedCars(parkingLot1, 3);
@@ -337,9 +366,6 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_parking_lot_1_when_parking_boy_park_a_car_given_that_parking_lot_1_has_the_same_position_rate() {
-        Car car1 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(15);
         parkingLot2.setCapacity(30);
         setInitiallyParkedCars(parkingLot1, 5);
@@ -359,9 +385,6 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_parking_lot_2_when_parking_boy_park_a_car_given_that_parking_lot_2_has_higher_position_rate() {
-        Car car1 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(5);
         parkingLot2.setCapacity(10);
         setInitiallyParkedCars(parkingLot1, 3);
@@ -381,9 +404,6 @@ class ParkingBoyTest {
 
     @Test
     void should_not_park_when_super_smart_parking_boy_park_a_car_given_that_both_parking_lot1_and_parking_lot2_is_full() {
-        Car car1 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(5);
         parkingLot2.setCapacity(10);
         setInitiallyParkedCars(parkingLot1, 3);
@@ -403,9 +423,6 @@ class ParkingBoyTest {
 
     @Test
     void should_not_get_any_ticket_when_super_smart_parking_boy_park_a_car_given_that_both_parking_lot1_and_parking_lot2_is_full() {
-        Car car1 = new Car();
-        ParkingLot parkingLot1 = new ParkingLot();
-        ParkingLot parkingLot2 = new ParkingLot();
         parkingLot1.setCapacity(10);
         parkingLot2.setCapacity(20);
         setInitiallyParkedCars(parkingLot1, 10);
@@ -427,43 +444,10 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_parking_lot_of_assigned_parking_boy_by_service_manager_when_smart_parking_boy_is_assigned_to_park_given_a_car() {
-        ParkingLot standardParkingBoyParkingLot1 = new ParkingLot();
-        ParkingLot standardParkingBoyParkingLot2 = new ParkingLot();
-        ParkingLot smartParkingBoyParkingLot1 = new ParkingLot();
-        ParkingLot smartParkingBoyParkingLot2 = new ParkingLot();
-        ParkingLot superSmartParkingBoyParkingLot1 = new ParkingLot();
-        ParkingLot superSmartParkingBoyParkingLot2 = new ParkingLot();
-        ParkingLot serviceManagerParkingLot1 = new ParkingLot();
-        ParkingLot serviceManagerParkingLot2 = new ParkingLot();
-
-        standardParkingBoyParkingLot1.setCapacity(10);
-        standardParkingBoyParkingLot1.setCapacity(10);
-
         smartParkingBoyParkingLot1.setCapacity(20);
         smartParkingBoyParkingLot2.setCapacity(20);
         setInitiallyParkedCars(smartParkingBoyParkingLot1, 15);
         setInitiallyParkedCars(smartParkingBoyParkingLot2, 10);
-
-        superSmartParkingBoyParkingLot1.setCapacity(30);
-        superSmartParkingBoyParkingLot1.setCapacity(30);
-
-        List<ParkingLot> assignedParkingLotsToStandardParkingBoy = Arrays.asList(standardParkingBoyParkingLot1
-                , standardParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToSmartParkingBoy = Arrays.asList(smartParkingBoyParkingLot1
-                , smartParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToSuperSmartParkingBoy = Arrays.asList(superSmartParkingBoyParkingLot1
-                , superSmartParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToServiceManager = Arrays.asList(serviceManagerParkingLot1
-                , serviceManagerParkingLot2);
-
-        ServiceManager serviceManager = new ServiceManager(assignedParkingLotsToServiceManager);
-        ParkingBoy standardParkingBoy = new ParkingBoy(assignedParkingLotsToStandardParkingBoy);
-        ParkingBoy smartParkingBoy = new SmartParkingBoy(assignedParkingLotsToSmartParkingBoy);
-        ParkingBoy superSmartParkingBoy = new SuperSmartParkingBoy(assignedParkingLotsToSuperSmartParkingBoy);
-
-        serviceManager.addParkingBoyToManagementList(Arrays.asList(standardParkingBoy
-                , smartParkingBoy
-                , superSmartParkingBoy));
 
         ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(smartParkingBoy);
 
@@ -483,41 +467,6 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_parking_lot_of_assigned_parking_boy_by_service_manager_when_standard_parking_boy_is_assigned_to_park_given_a_car() {
-        ParkingLot standardParkingBoyParkingLot1 = new ParkingLot();
-        ParkingLot standardParkingBoyParkingLot2 = new ParkingLot();
-        ParkingLot smartParkingBoyParkingLot1 = new ParkingLot();
-        ParkingLot smartParkingBoyParkingLot2 = new ParkingLot();
-        ParkingLot superSmartParkingBoyParkingLot1 = new ParkingLot();
-        ParkingLot superSmartParkingBoyParkingLot2 = new ParkingLot();
-        ParkingLot serviceManagerParkingLot1 = new ParkingLot();
-        ParkingLot serviceManagerParkingLot2 = new ParkingLot();
-
-        standardParkingBoyParkingLot1.setCapacity(10);
-        standardParkingBoyParkingLot1.setCapacity(10);
-
-        smartParkingBoyParkingLot1.setCapacity(20);
-        smartParkingBoyParkingLot2.setCapacity(20);
-
-        superSmartParkingBoyParkingLot1.setCapacity(30);
-        superSmartParkingBoyParkingLot1.setCapacity(30);
-
-        List<ParkingLot> assignedParkingLotsToStandardParkingBoy = Arrays.asList(standardParkingBoyParkingLot1
-                , standardParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToSmartParkingBoy = Arrays.asList(smartParkingBoyParkingLot1
-                , smartParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToSuperSmartParkingBoy = Arrays.asList(superSmartParkingBoyParkingLot1
-                , superSmartParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToServiceManager = Arrays.asList(serviceManagerParkingLot1
-                , serviceManagerParkingLot2);
-
-        ServiceManager serviceManager = new ServiceManager(assignedParkingLotsToServiceManager);
-        ParkingBoy standardParkingBoy = new ParkingBoy(assignedParkingLotsToStandardParkingBoy);
-        ParkingBoy smartParkingBoy = new SmartParkingBoy(assignedParkingLotsToSmartParkingBoy);
-        ParkingBoy superSmartParkingBoy = new SuperSmartParkingBoy(assignedParkingLotsToSuperSmartParkingBoy);
-
-        serviceManager.addParkingBoyToManagementList(Arrays.asList(standardParkingBoy
-                , smartParkingBoy
-                , superSmartParkingBoy));
 
         ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(standardParkingBoy);
 
@@ -537,43 +486,10 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_parking_lot_of_assigned_parking_boy_by_service_manager_when_super_smart_parking_boy_is_assigned_to_park_given_a_car() {
-        ParkingLot standardParkingBoyParkingLot1 = new ParkingLot();
-        ParkingLot standardParkingBoyParkingLot2 = new ParkingLot();
-        ParkingLot smartParkingBoyParkingLot1 = new ParkingLot();
-        ParkingLot smartParkingBoyParkingLot2 = new ParkingLot();
-        ParkingLot superSmartParkingBoyParkingLot1 = new ParkingLot();
-        ParkingLot superSmartParkingBoyParkingLot2 = new ParkingLot();
-        ParkingLot serviceManagerParkingLot1 = new ParkingLot();
-        ParkingLot serviceManagerParkingLot2 = new ParkingLot();
-
-        standardParkingBoyParkingLot1.setCapacity(10);
-        standardParkingBoyParkingLot1.setCapacity(10);
-
-        smartParkingBoyParkingLot1.setCapacity(20);
-        smartParkingBoyParkingLot2.setCapacity(20);
-
         superSmartParkingBoyParkingLot1.setCapacity(30);
         superSmartParkingBoyParkingLot2.setCapacity(15);
         setInitiallyParkedCars(superSmartParkingBoyParkingLot1, 10);
         setInitiallyParkedCars(superSmartParkingBoyParkingLot2, 2);
-
-        List<ParkingLot> assignedParkingLotsToStandardParkingBoy = Arrays.asList(standardParkingBoyParkingLot1
-                , standardParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToSmartParkingBoy = Arrays.asList(smartParkingBoyParkingLot1
-                , smartParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToSuperSmartParkingBoy = Arrays.asList(superSmartParkingBoyParkingLot1
-                , superSmartParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToServiceManager = Arrays.asList(serviceManagerParkingLot1
-                , serviceManagerParkingLot2);
-
-        ServiceManager serviceManager = new ServiceManager(assignedParkingLotsToServiceManager);
-        ParkingBoy standardParkingBoy = new ParkingBoy(assignedParkingLotsToStandardParkingBoy);
-        ParkingBoy smartParkingBoy = new SmartParkingBoy(assignedParkingLotsToSmartParkingBoy);
-        ParkingBoy superSmartParkingBoy = new SuperSmartParkingBoy(assignedParkingLotsToSuperSmartParkingBoy);
-
-        serviceManager.addParkingBoyToManagementList(Arrays.asList(standardParkingBoy
-                , smartParkingBoy
-                , superSmartParkingBoy));
 
         ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(superSmartParkingBoy);
 
@@ -589,6 +505,60 @@ class ParkingBoyTest {
         assertFalse(superSmartParkingBoyParkingLot1.getParkedCars().contains(car));
         assertFalse(serviceManagerParkingLot1.getParkedCars().contains(car));
         assertFalse(serviceManagerParkingLot2.getParkedCars().contains(car));
+    }
+
+    @Test
+    void should_park_to_service_manager_parking_lot_when_service_manager_parks_a_car_given_a_car() {
+        serviceManagerParkingLot1.setCapacity(40);
+        serviceManagerParkingLot2.setCapacity(40);
+        setInitiallyParkedCars(serviceManagerParkingLot1, 40);
+
+        List<ParkingLot> assignedParkingLotsToServiceManager = Arrays.asList(serviceManagerParkingLot1
+                , serviceManagerParkingLot2);
+
+        ServiceManager serviceManager = new ServiceManager(assignedParkingLotsToServiceManager);
+
+        ParkingTicket parkingTicket = serviceManager.parkCar(car);
+
+        assertNotNull(parkingTicket);
+        assertTrue(serviceManagerParkingLot2.getParkedCars().contains(car));
+    }
+
+    @Test
+    void should_throw_unrecognized_parking_ticket_when_assigned_parking_boy_fetch_a_car_given_a_wrong_parking_ticket() {
+        ParkingTicket wrongParkingTicket = new ParkingTicket();
+
+        ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(superSmartParkingBoy);
+
+        Throwable runtimeException = assertThrows(RuntimeException.class
+                , () -> assignedParkingBoy.fetchCar(wrongParkingTicket));
+        assertEquals("Unrecognized Parking Ticket " + wrongParkingTicket.hashCode()
+                , runtimeException.getMessage());
+    }
+
+    @Test
+    void should_throw_message_please_provide_your_parking_ticket_when_assigned_parking_boy_fetch_a_car_given_a_no_parking_ticket() {
+        ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(superSmartParkingBoy);
+
+        Throwable runtimeException = assertThrows(RuntimeException.class
+                , () -> assignedParkingBoy.fetchCar(null));
+        assertEquals("Please provide your parking ticket"
+                , runtimeException.getMessage());
+    }
+
+    @Test
+    void should_throw_not_enough_position_parking_ticket_when_assigned_parking_boy_park_a_car_given_a_no_parking_lot_is_full() {
+        superSmartParkingBoyParkingLot1.setCapacity(10);
+        superSmartParkingBoyParkingLot2.setCapacity(10);
+        setInitiallyParkedCars(superSmartParkingBoyParkingLot1, 10);
+        setInitiallyParkedCars(superSmartParkingBoyParkingLot2, 10);
+
+        ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(superSmartParkingBoy);
+
+        Throwable runtimeException = assertThrows(RuntimeException.class
+                , () -> assignedParkingBoy.parkCar(new Car()));
+        assertEquals("Not enough position"
+                , runtimeException.getMessage());
     }
 
     private void setInitiallyParkedCars(ParkingLot parkingLot, int numberOfCarsParked) {
