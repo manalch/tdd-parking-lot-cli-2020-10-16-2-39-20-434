@@ -19,6 +19,7 @@ public class SmartParkingBoy extends ParkingBoy implements IParkingStrategy {
         return parkingTicket;
     }
 
+    @Override
     public ParkingLot getAvailableParkingLot() {
         return super.getParkingLots().stream()
                 .filter(parkingLot -> parkingLot.getAvailableParkingLotCount() > 0)

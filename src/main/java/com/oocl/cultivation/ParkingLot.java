@@ -1,10 +1,11 @@
 package com.oocl.cultivation;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingLot {
-    private int capacity;
+    private Integer capacity;
     private List<Car> parkedCars = new ArrayList<>();
 
     public ParkingLot() {
@@ -22,15 +23,19 @@ public class ParkingLot {
         return parkedCars;
     }
 
-    public int getAvailableParkingLotCount() {
+    Integer getAvailableParkingLotCount() {
         return capacity - parkedCars.size();
     }
 
-    public void addCar(Car car) {
+    BigDecimal getLargestAvailablePositionRate() {
+        return BigDecimal.valueOf(getAvailableParkingLotCount().doubleValue() / capacity.doubleValue());
+    }
+
+    void addCar(Car car) {
         parkedCars.add(car);
     }
 
-    public void removeCar(Car car) {
+    void removeCar(Car car) {
         parkedCars.remove(car);
     }
 }
