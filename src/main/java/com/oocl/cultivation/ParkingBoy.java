@@ -4,20 +4,20 @@ import java.util.*;
 
 public class ParkingBoy {
     private Map<ParkingTicket, Car> parkingTicketCarMap = new HashMap<>();
-    private ParkingLot parkingLot;
-    private List<ParkingLot> parkingLots = new ArrayList<>();
+    private List<ParkingLot> parkingLots;
 
-    public ParkingBoy(ParkingLot parkingLot) {
-        this.parkingLot = parkingLot;
+    public ParkingBoy(List<ParkingLot> parkingLots) {
+        this.parkingLots = parkingLots;
     }
 
     public ParkingTicket park(Car car) {
-        if (hasNoAvailableParkingLot()){
+        ParkingLot parkingLot = getAvailableParkingLot();
+        if (Objects.isNull(parkingLot)){
             throw new RuntimeException("Not enough position");
         }
         ParkingTicket parkingTicket = new ParkingTicket();
         parkingTicketCarMap.put(parkingTicket, car);
-        parkingLot.parkCar(car);
+        parkingLot.addCar(car);
 
         return parkingTicket;
     }
@@ -31,12 +31,17 @@ public class ParkingBoy {
         }
         Car car = parkingTicketCarMap.get(parkingTicket);
         parkingTicketCarMap.remove(parkingTicket);
-        parkingLot.fetchCar(car);
+        removeCarFromParkingLot(car);
+
         return car;
     }
 
-    private boolean hasNoAvailableParkingLot() {
-        return parkingLot.getParkedCars().size() >= parkingLot.getCapacity();
+    public List<ParkingLot> getParkingLots() {
+        return parkingLots;
+    }
+
+    private boolean hasAvailableParkingLot(ParkingLot parkingLot) {
+        return parkingLot.getParkedCars().size() < parkingLot.getCapacity();
     }
 
     private boolean isUnrecognizedParkingTicket(ParkingTicket parkingTicket) {
@@ -45,5 +50,18 @@ public class ParkingBoy {
 
     private boolean hasNoParkingTicket(ParkingTicket parkingTicket) {
         return Objects.isNull(parkingTicket);
+    }
+
+    private ParkingLot getAvailableParkingLot(){
+        return parkingLots.stream()
+                .filter(this::hasAvailableParkingLot)
+                .findFirst()
+                .orElse(null);
+    }
+
+    private void removeCarFromParkingLot(Car car) {
+        parkingLots.stream()
+                .filter(lot -> lot.getParkedCars().contains(car))
+                .forEach(parkingLot -> parkingLot.removeCar(car));
     }
 }

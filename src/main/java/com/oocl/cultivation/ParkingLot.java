@@ -22,11 +22,11 @@ public class ParkingLot {
         return parkedCars;
     }
 
-    public void parkCar(Car car) {
+    public void addCar(Car car) {
         parkedCars.add(car);
     }
 
-    public void fetchCar(Car car) {
+    public void removeCar(Car car) {
         parkedCars.remove(car);
     }
 }
