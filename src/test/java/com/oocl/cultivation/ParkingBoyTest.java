@@ -287,4 +287,29 @@ class ParkingBoyTest {
         assertFalse(parkingLot1.getParkedCars().contains(car3));
         assertFalse(parkingLot2.getParkedCars().contains(car3));
     }
+
+    @Test
+    void should_return_car_when_smart_parking_boy_fetch_the_car_on_the_parking_lot_it_is_parked_given_a_parking_ticket() {
+        Car car1 = new Car();
+        Car car2 = new Car();
+        ParkingLot parkingLot1 = new ParkingLot();
+        ParkingLot parkingLot2 = new ParkingLot();
+        parkingLot1.setCapacity(10);
+        parkingLot2.setCapacity(20);
+        List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
+        parkingBoy = new SmartParkingBoy(assignedParkingLots);
+
+        ParkingTicket parkingTicket1 = parkingBoy.parkCar(car1);
+        parkingBoy.parkCar(car2);
+
+        Car fetchedCar1 = parkingBoy.fetchCar(parkingTicket1);
+
+        parkingLot1 = parkingBoy.getParkingLots().get(0);
+        parkingLot2 = parkingBoy.getParkingLots().get(1);
+
+        assertEquals(car1, fetchedCar1);
+        assertFalse(parkingLot1.getParkedCars().contains(car1));
+        assertFalse(parkingLot2.getParkedCars().contains(car1));
+        assertTrue(parkingLot2.getParkedCars().contains(car2));
+    }
 }
