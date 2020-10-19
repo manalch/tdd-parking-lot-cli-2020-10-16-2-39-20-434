@@ -14,10 +14,8 @@ class SmartParkingBoyTest {
 
     @BeforeEach
     void setUp() {
-        parkingLot1 = new ParkingLot();
-        parkingLot2 = new ParkingLot();
-        parkingLot1.setCapacity(10);
-        parkingLot2.setCapacity(20);
+        parkingLot1 = new ParkingLot(10);
+        parkingLot2 = new ParkingLot(20);
     }
 
     @Test
@@ -44,6 +42,7 @@ class SmartParkingBoyTest {
     }
 
     private void setInitiallyParkedCars(ParkingLot parkingLot, int numberOfCarsParked) {
+        // TODO: 10/19/2020 use stream
         for (int i = 0; i < numberOfCarsParked; i++) {
             parkingLot.addCar(new Car());
         }

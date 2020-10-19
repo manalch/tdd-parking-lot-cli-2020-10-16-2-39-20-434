@@ -35,10 +35,9 @@ class ParkingBoyTest {
 
     @BeforeEach
     void setUp() {
-        parkingLot = new ParkingLot();
-        parkingLot1 = new ParkingLot();
-        parkingLot2 = new ParkingLot();
-        parkingLot.setCapacity(10);
+        parkingLot = new ParkingLot(10);
+        parkingLot1 = new ParkingLot(10);
+        parkingLot2 = new ParkingLot(10);
 
         car = new Car();
         car1 = new Car();
@@ -48,26 +47,14 @@ class ParkingBoyTest {
         parkingTicket = new ParkingTicket();
         parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
 
-        standardParkingBoyParkingLot1 = new ParkingLot();
-        standardParkingBoyParkingLot2 = new ParkingLot();
-        smartParkingBoyParkingLot1 = new ParkingLot();
-        smartParkingBoyParkingLot2 = new ParkingLot();
-        superSmartParkingBoyParkingLot1 = new ParkingLot();
-        superSmartParkingBoyParkingLot2 = new ParkingLot();
-        serviceManagerParkingLot1 = new ParkingLot();
-        serviceManagerParkingLot2 = new ParkingLot();
-
-        standardParkingBoyParkingLot1.setCapacity(10);
-        standardParkingBoyParkingLot1.setCapacity(10);
-
-        smartParkingBoyParkingLot1.setCapacity(20);
-        smartParkingBoyParkingLot2.setCapacity(20);
-
-        superSmartParkingBoyParkingLot1.setCapacity(30);
-        superSmartParkingBoyParkingLot1.setCapacity(30);
-
-        serviceManagerParkingLot1.setCapacity(40);
-        serviceManagerParkingLot2.setCapacity(40);
+        standardParkingBoyParkingLot1 = new ParkingLot(10);
+        standardParkingBoyParkingLot2 = new ParkingLot(10);
+        smartParkingBoyParkingLot1 = new ParkingLot(20);
+        smartParkingBoyParkingLot2 = new ParkingLot(20);
+        superSmartParkingBoyParkingLot1 = new ParkingLot(30);
+        superSmartParkingBoyParkingLot2 = new ParkingLot(30);
+        serviceManagerParkingLot1 = new ParkingLot(40);
+        serviceManagerParkingLot2 = new ParkingLot(40);
 
         List<ParkingLot> assignedParkingLotsToStandardParkingBoy = Arrays.asList(standardParkingBoyParkingLot1
                 , standardParkingBoyParkingLot2);
@@ -106,10 +93,8 @@ class ParkingBoyTest {
 
     @Test
     void should_return_fetched_cars_when_parking_boy_fetch_the_two_cars_given_parked_with_corresponding_tickets() {
-        Car car1 = new Car();
         ParkingTicket parkingTicket1 = parkingBoy.parkCar(car1);
 
-        Car car2 = new Car();
         ParkingTicket parkingTicket2 = parkingBoy.parkCar(car2);
 
         Car fetchedCar1 = parkingBoy.fetchCar(parkingTicket1);
@@ -167,8 +152,8 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_lot_1_when_parking_boy_park_the_car_given_a_car_and_parking_lot1_is_not_yet_full() {
-        parkingLot1.setCapacity(10);
-        parkingLot2.setCapacity(10);
+        parkingLot1 = new ParkingLot(10);
+        parkingLot2 = new ParkingLot(10);
 
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new ParkingBoy(assignedParkingLots);
@@ -184,8 +169,8 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_lot_2_when_parking_boy_park_the_car_given_a_car_and_parking_lot1_is_full_and_parking_lot2_is_not_full() {
-        parkingLot1.setCapacity(1);
-        parkingLot2.setCapacity(5);
+        parkingLot1 = new ParkingLot(1);
+        parkingLot2 = new ParkingLot(5);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new ParkingBoy(assignedParkingLots);
 
@@ -210,8 +195,8 @@ class ParkingBoyTest {
 
     @Test
     void should_not_park_when_parking_boy_park_the_car_given_a_car_and_parking_lot1_and_parking_lot2_is_full() {
-        parkingLot1.setCapacity(1);
-        parkingLot2.setCapacity(1);
+        parkingLot1 = new ParkingLot(1);
+        parkingLot2 = new ParkingLot(1);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new ParkingBoy(assignedParkingLots);
 
@@ -241,8 +226,8 @@ class ParkingBoyTest {
 
     @Test
     void should_park_cars_into_more_capacity_parking_lot_when_smart_parking_boy_park_a_car_given_two_parking_lots() {
-        parkingLot1.setCapacity(2);
-        parkingLot2.setCapacity(2);
+        parkingLot1 = new ParkingLot(2);
+        parkingLot2 = new ParkingLot(2);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new SmartParkingBoy(assignedParkingLots);
 
@@ -268,8 +253,8 @@ class ParkingBoyTest {
 
     @Test
     void should_park_all_cars_to_parking_lot2_when_smart_parking_boy_park_a_car_given_parking_lot1_capacity_is_2_and_parking_lot2_capacity_is_10() {
-        parkingLot1.setCapacity(2);
-        parkingLot2.setCapacity(10);
+        parkingLot1 = new ParkingLot(2);
+        parkingLot2 = new ParkingLot(10);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new SmartParkingBoy(assignedParkingLots);
 
@@ -295,8 +280,8 @@ class ParkingBoyTest {
 
     @Test
     void should_not_park_when_smart_parking_boy_park_the_car_given_a_car_and_parking_lot1_and_parking_lot2_is_full() {
-        parkingLot1.setCapacity(1);
-        parkingLot2.setCapacity(1);
+        parkingLot1 = new ParkingLot(1);
+        parkingLot2 = new ParkingLot(1);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new SmartParkingBoy(assignedParkingLots);
 
@@ -326,8 +311,8 @@ class ParkingBoyTest {
 
     @Test
     void should_return_car_when_smart_parking_boy_fetch_the_car_on_the_parking_lot_it_is_parked_given_a_parking_ticket() {
-        parkingLot1.setCapacity(10);
-        parkingLot2.setCapacity(20);
+        parkingLot1 = new ParkingLot(10);
+        parkingLot2 = new ParkingLot(20);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new SmartParkingBoy(assignedParkingLots);
 
@@ -347,8 +332,8 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_parking_lot_1_when_parking_boy_park_a_car_given_that_parking_lot_1_has_higher_position_rate() {
-        parkingLot1.setCapacity(15);
-        parkingLot2.setCapacity(20);
+        parkingLot1 = new ParkingLot(15);
+        parkingLot2 = new ParkingLot(20);
         setInitiallyParkedCars(parkingLot1, 3);
         setInitiallyParkedCars(parkingLot2, 5);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -366,8 +351,8 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_parking_lot_1_when_parking_boy_park_a_car_given_that_parking_lot_1_has_the_same_position_rate() {
-        parkingLot1.setCapacity(15);
-        parkingLot2.setCapacity(30);
+        parkingLot1 = new ParkingLot(15);
+        parkingLot2 = new ParkingLot(30);
         setInitiallyParkedCars(parkingLot1, 5);
         setInitiallyParkedCars(parkingLot2, 10);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -385,8 +370,8 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_parking_lot_2_when_parking_boy_park_a_car_given_that_parking_lot_2_has_higher_position_rate() {
-        parkingLot1.setCapacity(5);
-        parkingLot2.setCapacity(10);
+        parkingLot1 = new ParkingLot(5);
+        parkingLot2 = new ParkingLot(10);
         setInitiallyParkedCars(parkingLot1, 3);
         setInitiallyParkedCars(parkingLot2, 2);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -404,8 +389,8 @@ class ParkingBoyTest {
 
     @Test
     void should_not_park_when_super_smart_parking_boy_park_a_car_given_that_both_parking_lot1_and_parking_lot2_is_full() {
-        parkingLot1.setCapacity(5);
-        parkingLot2.setCapacity(10);
+        parkingLot1 = new ParkingLot(5);
+        parkingLot2 = new ParkingLot(10);
         setInitiallyParkedCars(parkingLot1, 3);
         setInitiallyParkedCars(parkingLot2, 2);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -423,8 +408,8 @@ class ParkingBoyTest {
 
     @Test
     void should_not_get_any_ticket_when_super_smart_parking_boy_park_a_car_given_that_both_parking_lot1_and_parking_lot2_is_full() {
-        parkingLot1.setCapacity(10);
-        parkingLot2.setCapacity(20);
+        parkingLot1 = new ParkingLot(10);
+        parkingLot2 = new ParkingLot(20);
         setInitiallyParkedCars(parkingLot1, 10);
         setInitiallyParkedCars(parkingLot2, 20);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
@@ -509,8 +494,8 @@ class ParkingBoyTest {
 
     @Test
     void should_park_to_service_manager_parking_lot_when_service_manager_parks_a_car_given_a_car() {
-        serviceManagerParkingLot1.setCapacity(40);
-        serviceManagerParkingLot2.setCapacity(40);
+        serviceManagerParkingLot1 = new ParkingLot(40);
+        serviceManagerParkingLot2 = new ParkingLot(40);
         setInitiallyParkedCars(serviceManagerParkingLot1, 40);
 
         List<ParkingLot> assignedParkingLotsToServiceManager = Arrays.asList(serviceManagerParkingLot1

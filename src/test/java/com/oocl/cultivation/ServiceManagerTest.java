@@ -18,10 +18,10 @@ class ServiceManagerTest {
 
     @BeforeEach
     void setUp() {
-        ParkingLot assignedParkingLotToServiceManager = new ParkingLot();
-        ParkingLot assignedParkingLotToStandardParkingBoy = new ParkingLot();
-        ParkingLot assignedParkingLotToSmartParkingBoy = new ParkingLot();
-        ParkingLot assignedParkingLotToSuperSmartParkingBoy = new ParkingLot();
+        ParkingLot assignedParkingLotToServiceManager = new ParkingLot(10);
+        ParkingLot assignedParkingLotToStandardParkingBoy = new ParkingLot(10);
+        ParkingLot assignedParkingLotToSmartParkingBoy = new ParkingLot(10);
+        ParkingLot assignedParkingLotToSuperSmartParkingBoy = new ParkingLot(10);
 
         serviceManager = new ServiceManager(Collections.singletonList(assignedParkingLotToServiceManager));
         standardParkingBoy = new ParkingBoy(Collections.singletonList(assignedParkingLotToStandardParkingBoy));

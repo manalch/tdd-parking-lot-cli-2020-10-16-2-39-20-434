@@ -14,10 +14,8 @@ class SuperSmartParkingBoyTest {
 
     @BeforeEach
     void setUp() {
-        parkingLot1 = new ParkingLot();
-        parkingLot2 = new ParkingLot();
-        parkingLot1.setCapacity(10);
-        parkingLot2.setCapacity(30);
+        parkingLot1 = new ParkingLot(10);
+        parkingLot2 = new ParkingLot(30);
     }
 
     @Test

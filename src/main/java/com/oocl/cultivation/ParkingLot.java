@@ -6,30 +6,32 @@ import java.util.List;
 
 public class ParkingLot {
 
-    private Integer capacity;
+    private int capacity;
     private List<Car> parkedCars = new ArrayList<>();
 
-    public ParkingLot() {
+    public ParkingLot(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public ParkingLot setCapacity(int capacity) {
+        this.capacity = capacity;
+        return this;
     }
 
     public int getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
     public List<Car> getParkedCars() {
         return parkedCars;
     }
 
-    Integer getAvailableParkingLotCount() {
+    int getAvailableParkingLotCount() {
         return capacity - parkedCars.size();
     }
 
     BigDecimal getLargestAvailablePositionRate() {
-        return BigDecimal.valueOf(getAvailableParkingLotCount().doubleValue() / capacity.doubleValue());
+        return BigDecimal.valueOf((double) getAvailableParkingLotCount() / (double) capacity);
     }
 
     void addCar(Car car) {

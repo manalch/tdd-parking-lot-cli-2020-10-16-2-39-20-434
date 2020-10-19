@@ -13,19 +13,19 @@ class ParkingLotTest {
 
     @BeforeEach
     void setUp() {
-        parkingLot = new ParkingLot();
+        parkingLot = new ParkingLot(10);
     }
 
     @Test
     void should_return_10_capacity_when_it_is_set_given_10_capacity() {
-        parkingLot.setCapacity(10);
+        parkingLot = new ParkingLot(10);
 
         assertEquals(10, parkingLot.getCapacity());
     }
 
     @Test
     void should_return_avaiable_count_when_getAvailableParkingLotCount_is_called_given_capacity_and_parkedCars() {
-        parkingLot.setCapacity(3);
+        parkingLot = new ParkingLot(3);
         parkingLot.addCar(new Car());
 
         assertEquals(2, parkingLot.getAvailableParkingLotCount());
@@ -33,7 +33,7 @@ class ParkingLotTest {
 
     @Test
     void should_return_available_position_rate_when_getLargestAvailablePositonRate_is_called_given_available_count_and_capacity() {
-        parkingLot.setCapacity(10);
+        parkingLot = new ParkingLot(10);
         parkingLot.addCar(new Car());
 
         BigDecimal largestAvailablePositionRate = parkingLot.getLargestAvailablePositionRate();
