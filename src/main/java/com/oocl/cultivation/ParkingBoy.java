@@ -1,13 +1,13 @@
 package com.oocl.cultivation;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ParkingBoy implements IParkingStrategy {
 
-    private Map<ParkingTicket, Car> parkingTicketCarMap = new HashMap<>();
+    private Map<ParkingTicket, Car> parkingTicketCarMap = new ConcurrentHashMap<>();
     private List<ParkingLot> parkingLots;
 
     public ParkingBoy(List<ParkingLot> parkingLots) {
