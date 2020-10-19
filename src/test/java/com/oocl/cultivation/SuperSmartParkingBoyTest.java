@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,8 +43,7 @@ class SuperSmartParkingBoyTest {
     }
 
     private void setInitiallyParkedCars(ParkingLot parkingLot, int numberOfCarsParked) {
-        for (int i = 0; i < numberOfCarsParked; i++) {
-            parkingLot.addCar(new Car());
-        }
+        IntStream.range(0, numberOfCarsParked)
+                .forEach(value -> parkingLot.addCar(new Car()));
     }
 }
