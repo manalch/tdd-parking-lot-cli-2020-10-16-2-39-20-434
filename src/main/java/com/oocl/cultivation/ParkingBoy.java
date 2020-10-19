@@ -29,26 +29,26 @@ public class ParkingBoy implements IParkingStrategy {
         return parkingLots.stream()
                 .filter(parkingLot -> parkingLot.getAvailableParkingLotCount() > 0)
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Not enough position"));
+                .orElseThrow(() -> new ParkingException("Not enough position"));
     }
 
     public Car fetchCar(ParkingTicket parkingTicket) {
         if (hasNoParkingTicket(parkingTicket)) {
-            throw new RuntimeException("Please provide your parking ticket");
+            throw new ParkingException("Please provide your parking ticket");
         }
         return getCarFromParkingLot(parkingTicket);
     }
 
     private Car getCarFromParkingLot(ParkingTicket parkingTicket) {
         if (isUnrecognizedParkingTicket(parkingTicket)) {
-            throw new RuntimeException("Unrecognized Parking Ticket " + parkingTicket.hashCode());
+            throw new ParkingException("Unrecognized Parking Ticket " + parkingTicket.hashCode());
         }
         Car car = parkingTicketCarMap.get(parkingTicket);
 
         ParkingLot parkingLot = parkingLots.stream()
                 .filter(lot -> lot.getParkedCars().contains(car))
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("Your car is missing"));
+                .orElseThrow(() -> new ParkingException("Your car is missing"));
 
         parkingTicketCarMap.remove(parkingTicket);
         parkingLot.removeCar(car);
@@ -68,7 +68,7 @@ public class ParkingBoy implements IParkingStrategy {
         return parkingLots;
     }
 
-    public Map<ParkingTicket, Car> getParkingTicketCarMap() {
+    Map<ParkingTicket, Car> getParkingTicketCarMap() {
         return parkingTicketCarMap;
     }
 }
