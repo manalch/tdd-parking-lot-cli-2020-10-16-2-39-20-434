@@ -24,7 +24,7 @@ public class ServiceManager implements IParkingStrategy, IFetchingStrategy {
         return managementList.stream()
                 .filter(parkingBoy -> parkingBoy.equals(assignedParkingBoy))
                 .findFirst()
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new ParkingException("Parking boy not in management list"));
     }
 
     @Override

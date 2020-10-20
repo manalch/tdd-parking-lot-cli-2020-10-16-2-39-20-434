@@ -21,7 +21,7 @@ public class ParkingBoy implements IParkingStrategy, IFetchingStrategy {
     @Override
     public ParkingLot getAvailableParkingLot() {
         return parkingLots.stream()
-                .filter(parkingLot -> parkingLot.getAvailableParkingLotCount() > 0)
+                .filter(ParkingLot::hasAvailableParkingLot)
                 .findFirst()
                 .orElseThrow(() -> new ParkingException("Not enough position"));
     }

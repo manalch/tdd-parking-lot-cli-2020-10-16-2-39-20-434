@@ -8,17 +8,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ParkingLot {
 
-    private Map<ParkingTicket, Car> parkingTicketCarMap = new ConcurrentHashMap<>();
-    private List<Car> parkedCars = new ArrayList<>();
     private int capacity;
+    private List<Car> parkedCars = new ArrayList<>();
+    private Map<ParkingTicket, Car> parkingTicketCarMap = new ConcurrentHashMap<>();
 
     public ParkingLot(int capacity) {
         this.capacity = capacity;
     }
 
-    public ParkingLot setCapacity(int capacity) {
+    public void setCapacity(int capacity) {
         this.capacity = capacity;
-        return this;
     }
 
     public int getCapacity() {
@@ -31,6 +30,10 @@ public class ParkingLot {
 
     int getAvailableParkingLotCount() {
         return capacity - parkedCars.size();
+    }
+
+    boolean hasAvailableParkingLot() {
+        return getAvailableParkingLotCount() > 0;
     }
 
     BigDecimal getLargestAvailablePositionRate() {
