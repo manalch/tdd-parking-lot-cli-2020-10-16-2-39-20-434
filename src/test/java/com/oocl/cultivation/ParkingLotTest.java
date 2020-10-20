@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ParkingLotTest {
 
@@ -48,15 +49,5 @@ class ParkingLotTest {
         parkingLot.addCar(car);
 
         assertTrue(parkingLot.getParkedCars().contains(car));
-    }
-
-    @Test
-    void should_remove_from_parking_lot_when_remove_a_car_given_a_car() {
-        Car car = new Car();
-
-        parkingLot.addCar(car);
-        parkingLot.removeCar(car);
-
-        assertFalse(parkingLot.getParkedCars().contains(car));
     }
 }

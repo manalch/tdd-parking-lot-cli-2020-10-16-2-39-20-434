@@ -12,11 +12,8 @@ public class SmartParkingBoy extends ParkingBoy {
     @Override
     public ParkingTicket parkCar(Car car) {
         ParkingLot parkingLot = getAvailableParkingLot();
-        ParkingTicket parkingTicket = new ParkingTicket();
-        super.getParkingTicketCarMap().put(parkingTicket, car);
-        parkingLot.addCar(car);
 
-        return parkingTicket;
+        return parkingLot.addCar(car);
     }
 
     @Override

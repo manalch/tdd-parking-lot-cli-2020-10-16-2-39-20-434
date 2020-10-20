@@ -143,10 +143,10 @@ class ParkingBoyTest {
     void should_not_return_any_parking_ticket_when_parking_lot_capacity_is_1_and_occupied_given_a_new_car_to_park() {
         parkingLot.setCapacity(1);
 
-        ParkingTicket parkingTicket = parkingBoy.parkCar(new Car());
+        ParkingTicket parkingTicket = parkingBoy.parkCar(car2);
         assertNotNull(parkingTicket);
         Throwable runtimeException = assertThrows(RuntimeException.class
-                , () -> parkingBoy.parkCar(new Car()));
+                , () -> parkingBoy.parkCar(car1));
         assertEquals("Not enough position"
                 , runtimeException.getMessage());
     }
@@ -312,8 +312,8 @@ class ParkingBoyTest {
 
     @Test
     void should_return_car_when_smart_parking_boy_fetch_the_car_on_the_parking_lot_it_is_parked_given_a_parking_ticket() {
-        parkingLot1 = new ParkingLot(10);
-        parkingLot2 = new ParkingLot(20);
+        parkingLot1.setCapacity(10);
+        parkingLot2.setCapacity(10);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new SmartParkingBoy(assignedParkingLots);
 
