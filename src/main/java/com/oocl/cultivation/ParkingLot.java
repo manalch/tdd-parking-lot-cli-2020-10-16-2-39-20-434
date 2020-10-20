@@ -16,10 +16,6 @@ public class ParkingLot {
         this.capacity = capacity;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
     public int getCapacity() {
         return capacity;
     }
@@ -40,7 +36,7 @@ public class ParkingLot {
         return BigDecimal.valueOf((double) getAvailableParkingLotCount() / (double) capacity);
     }
 
-    ParkingTicket addCar(Car car) {
+    ParkingTicket parkCar(Car car) {
         ParkingTicket parkingTicket = new ParkingTicket();
         parkingTicketCarMap.put(parkingTicket, car);
         parkedCars.add(car);

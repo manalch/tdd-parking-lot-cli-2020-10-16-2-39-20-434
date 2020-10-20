@@ -4,42 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ServiceManager implements IParkingStrategy, IFetchingStrategy {
-    private List<ParkingBoy> managementList = new ArrayList<>();
-    private List<ParkingLot> parkingLots;
+public class ServiceManager implements IParkingStrategy {
 
-    public ServiceManager(List<ParkingLot> parkingLots) {
-        this.parkingLots = parkingLots;
+    private List<IParkingStrategy> parkingStrategies = new ArrayList<>();
+    private List<ParkingLot> parkingLots = new ArrayList<>();
+
+    public ServiceManager(List<ParkingLot> parkingLots, List<IParkingStrategy> parkingStrategies) {
+        this.parkingLots.addAll(parkingLots);
+        this.parkingStrategies.addAll(parkingStrategies);
     }
 
-    public void addParkingBoyToManagementList(ParkingBoy parkingBoy) {
-        managementList.add(parkingBoy);
-    }
-
-    public void addParkingBoyToManagementList(List<ParkingBoy> parkingBoyList) {
-        managementList.addAll(parkingBoyList);
-    }
-
-    public ParkingBoy assignParkingBoy(ParkingBoy assignedParkingBoy) {
-        return managementList.stream()
-                .filter(parkingBoy -> parkingBoy.equals(assignedParkingBoy))
+    public ParkingTicket assignedPark(Car car) {
+        return parkingStrategies.stream()
                 .findFirst()
-                .orElseThrow(() -> new ParkingException("Parking boy not in management list"));
+                .orElseThrow(() -> new ParkingException("Not enough position"))
+                .parkCar(car);
+    }
+
+    public Car assignedFetch(ParkingTicket parkingTicket) {
+        return parkingStrategies.stream()
+                .findFirst()
+                .orElseThrow(() -> new ParkingException("Unrecognized Parking Ticket " + parkingTicket.hashCode()))
+                .fetchCar(parkingTicket);
     }
 
     @Override
     public ParkingTicket parkCar(Car car) {
-        ParkingLot parkingLot = getAvailableParkingLot();
-
-        return parkingLot.addCar(car);
-    }
-
-    @Override
-    public ParkingLot getAvailableParkingLot() {
         return parkingLots.stream()
                 .filter(parkingLot -> parkingLot.getAvailableParkingLotCount() > 0)
                 .findFirst()
-                .orElseThrow(() -> new ParkingException("Not enough position"));
+                .orElseThrow(() -> new ParkingException("Not enough position"))
+                .parkCar(car);
     }
 
     @Override

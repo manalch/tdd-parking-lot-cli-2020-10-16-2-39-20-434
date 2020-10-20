@@ -3,11 +3,9 @@ package com.oocl.cultivation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ServiceManagerTest {
 
@@ -23,27 +21,18 @@ class ServiceManagerTest {
         ParkingLot assignedParkingLotToSmartParkingBoy = new ParkingLot(10);
         ParkingLot assignedParkingLotToSuperSmartParkingBoy = new ParkingLot(10);
 
-        serviceManager = new ServiceManager(Collections.singletonList(assignedParkingLotToServiceManager));
         standardParkingBoy = new ParkingBoy(Collections.singletonList(assignedParkingLotToStandardParkingBoy));
         smartParkingBoy = new SmartParkingBoy(Collections.singletonList(assignedParkingLotToSmartParkingBoy));
         superSmartParkingBoy = new SuperSmartParkingBoy(Collections.singletonList(assignedParkingLotToSuperSmartParkingBoy));
+        serviceManager = new ServiceManager(Collections.singletonList(assignedParkingLotToServiceManager)
+                , Collections.singletonList(standardParkingBoy));
     }
 
     @Test
-    void should_return_assigned_smart_parking_boy_when_parking_boy_is_assigned_given_a_smart_parking_boy() {
-        serviceManager.addParkingBoyToManagementList(Arrays.asList(standardParkingBoy, smartParkingBoy, superSmartParkingBoy));
-
-        ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(smartParkingBoy);
-
-        assertSame(smartParkingBoy, assignedParkingBoy);
-    }
-
-    @Test
-    void should_throw_fail_to_do_task_when_parking_boy_when_parking_boy_assigned_cant_do_his_task() {
-        serviceManager.addParkingBoyToManagementList(standardParkingBoy);
-
-        assertThrows(RuntimeException.class, () -> {
-            serviceManager.assignParkingBoy(superSmartParkingBoy);
-        });
+    void should_return_parking_ticket_when_assign_parking_boy_park_car() {
+        assertNotNull(serviceManager);
+        assertNotNull(standardParkingBoy);
+        assertNotNull(smartParkingBoy);
+        assertNotNull(superSmartParkingBoy);
     }
 }

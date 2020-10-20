@@ -33,6 +33,11 @@ class ParkingBoyTest {
     private ParkingBoy standardParkingBoy;
     private ParkingBoy smartParkingBoy;
     private ParkingBoy superSmartParkingBoy;
+    private List<ParkingLot> assignedParkingLotsToStandardParkingBoy;
+    private List<ParkingLot> assignedParkingLotsToSmartParkingBoy;
+    private List<ParkingLot> assignedParkingLotsToSuperSmartParkingBoy;
+    private List<ParkingLot> assignedParkingLotsToServiceManager;
+    private List<IParkingStrategy> parkingStrategist;
 
     @BeforeEach
     void setUp() {
@@ -57,23 +62,20 @@ class ParkingBoyTest {
         serviceManagerParkingLot1 = new ParkingLot(40);
         serviceManagerParkingLot2 = new ParkingLot(40);
 
-        List<ParkingLot> assignedParkingLotsToStandardParkingBoy = Arrays.asList(standardParkingBoyParkingLot1
+        assignedParkingLotsToStandardParkingBoy = Arrays.asList(standardParkingBoyParkingLot1
                 , standardParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToSmartParkingBoy = Arrays.asList(smartParkingBoyParkingLot1
+        assignedParkingLotsToSmartParkingBoy = Arrays.asList(smartParkingBoyParkingLot1
                 , smartParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToSuperSmartParkingBoy = Arrays.asList(superSmartParkingBoyParkingLot1
+        assignedParkingLotsToSuperSmartParkingBoy = Arrays.asList(superSmartParkingBoyParkingLot1
                 , superSmartParkingBoyParkingLot2);
-        List<ParkingLot> assignedParkingLotsToServiceManager = Arrays.asList(serviceManagerParkingLot1
+        assignedParkingLotsToServiceManager = Arrays.asList(serviceManagerParkingLot1
                 , serviceManagerParkingLot2);
+        parkingStrategist = Arrays.asList(standardParkingBoy, smartParkingBoy, superSmartParkingBoy);
 
-        serviceManager = new ServiceManager(assignedParkingLotsToServiceManager);
+        serviceManager = new ServiceManager(assignedParkingLotsToServiceManager, parkingStrategist);
         standardParkingBoy = new ParkingBoy(assignedParkingLotsToStandardParkingBoy);
         smartParkingBoy = new SmartParkingBoy(assignedParkingLotsToSmartParkingBoy);
         superSmartParkingBoy = new SuperSmartParkingBoy(assignedParkingLotsToSuperSmartParkingBoy);
-
-        serviceManager.addParkingBoyToManagementList(Arrays.asList(standardParkingBoy
-                , smartParkingBoy
-                , superSmartParkingBoy));
     }
 
     @Test
@@ -141,12 +143,13 @@ class ParkingBoyTest {
 
     @Test
     void should_not_return_any_parking_ticket_when_parking_lot_capacity_is_1_and_occupied_given_a_new_car_to_park() {
-        parkingLot.setCapacity(1);
+        ParkingLot parkingLot = new ParkingLot(1);
+        ParkingBoy parkingBoy = new ParkingBoy(Collections.singletonList(parkingLot));
 
-        ParkingTicket parkingTicket = parkingBoy.parkCar(car2);
+        ParkingTicket parkingTicket = parkingBoy.parkCar(car1);
         assertNotNull(parkingTicket);
         Throwable runtimeException = assertThrows(RuntimeException.class
-                , () -> parkingBoy.parkCar(car1));
+                , () -> parkingBoy.parkCar(car2));
         assertEquals("Not enough position"
                 , runtimeException.getMessage());
     }
@@ -312,8 +315,8 @@ class ParkingBoyTest {
 
     @Test
     void should_return_car_when_smart_parking_boy_fetch_the_car_on_the_parking_lot_it_is_parked_given_a_parking_ticket() {
-        parkingLot1.setCapacity(10);
-        parkingLot2.setCapacity(10);
+        parkingLot1 = new ParkingLot(10);
+        parkingLot2 = new ParkingLot(10);
         List<ParkingLot> assignedParkingLots = Arrays.asList(parkingLot1, parkingLot2);
         parkingBoy = new SmartParkingBoy(assignedParkingLots);
 
@@ -429,71 +432,6 @@ class ParkingBoyTest {
     }
 
     @Test
-    void should_park_to_parking_lot_of_assigned_parking_boy_by_service_manager_when_smart_parking_boy_is_assigned_to_park_given_a_car() {
-        smartParkingBoyParkingLot1.setCapacity(20);
-        smartParkingBoyParkingLot2.setCapacity(20);
-        setInitiallyParkedCars(smartParkingBoyParkingLot1, 15);
-        setInitiallyParkedCars(smartParkingBoyParkingLot2, 10);
-
-        ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(smartParkingBoy);
-
-        ParkingTicket parkingTicket = assignedParkingBoy.parkCar(car);
-
-        assertNotNull(parkingTicket);
-        assertTrue(smartParkingBoyParkingLot2.getParkedCars().contains(car));
-
-        assertFalse(standardParkingBoyParkingLot1.getParkedCars().contains(car));
-        assertFalse(standardParkingBoyParkingLot2.getParkedCars().contains(car));
-        assertFalse(smartParkingBoyParkingLot1.getParkedCars().contains(car));
-        assertFalse(superSmartParkingBoyParkingLot1.getParkedCars().contains(car));
-        assertFalse(superSmartParkingBoyParkingLot2.getParkedCars().contains(car));
-        assertFalse(serviceManagerParkingLot1.getParkedCars().contains(car));
-        assertFalse(serviceManagerParkingLot2.getParkedCars().contains(car));
-    }
-
-    @Test
-    void should_park_to_parking_lot_of_assigned_parking_boy_by_service_manager_when_standard_parking_boy_is_assigned_to_park_given_a_car() {
-
-        ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(standardParkingBoy);
-
-        ParkingTicket parkingTicket = assignedParkingBoy.parkCar(car);
-
-        assertNotNull(parkingTicket);
-        assertTrue(standardParkingBoyParkingLot1.getParkedCars().contains(car));
-
-        assertFalse(standardParkingBoyParkingLot2.getParkedCars().contains(car));
-        assertFalse(smartParkingBoyParkingLot1.getParkedCars().contains(car));
-        assertFalse(smartParkingBoyParkingLot2.getParkedCars().contains(car));
-        assertFalse(superSmartParkingBoyParkingLot1.getParkedCars().contains(car));
-        assertFalse(superSmartParkingBoyParkingLot2.getParkedCars().contains(car));
-        assertFalse(serviceManagerParkingLot1.getParkedCars().contains(car));
-        assertFalse(serviceManagerParkingLot2.getParkedCars().contains(car));
-    }
-
-    @Test
-    void should_park_to_parking_lot_of_assigned_parking_boy_by_service_manager_when_super_smart_parking_boy_is_assigned_to_park_given_a_car() {
-        superSmartParkingBoyParkingLot1.setCapacity(30);
-        superSmartParkingBoyParkingLot2.setCapacity(15);
-        setInitiallyParkedCars(superSmartParkingBoyParkingLot1, 10);
-        setInitiallyParkedCars(superSmartParkingBoyParkingLot2, 2);
-
-        ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(superSmartParkingBoy);
-
-        ParkingTicket parkingTicket = assignedParkingBoy.parkCar(car);
-
-        assertNotNull(parkingTicket);
-        assertTrue(superSmartParkingBoyParkingLot2.getParkedCars().contains(car));
-
-        assertFalse(standardParkingBoyParkingLot1.getParkedCars().contains(car));
-        assertFalse(standardParkingBoyParkingLot2.getParkedCars().contains(car));
-        assertFalse(smartParkingBoyParkingLot1.getParkedCars().contains(car));
-        assertFalse(smartParkingBoyParkingLot2.getParkedCars().contains(car));
-        assertFalse(superSmartParkingBoyParkingLot1.getParkedCars().contains(car));
-        assertFalse(serviceManagerParkingLot1.getParkedCars().contains(car));
-        assertFalse(serviceManagerParkingLot2.getParkedCars().contains(car));
-    }
-
-    @Test
     void should_park_to_service_manager_parking_lot_when_service_manager_parks_a_car_given_a_car() {
         serviceManagerParkingLot1 = new ParkingLot(40);
         serviceManagerParkingLot2 = new ParkingLot(40);
@@ -502,7 +440,7 @@ class ParkingBoyTest {
         List<ParkingLot> assignedParkingLotsToServiceManager = Arrays.asList(serviceManagerParkingLot1
                 , serviceManagerParkingLot2);
 
-        ServiceManager serviceManager = new ServiceManager(assignedParkingLotsToServiceManager);
+        ServiceManager serviceManager = new ServiceManager(assignedParkingLotsToServiceManager, parkingStrategist);
 
         ParkingTicket parkingTicket = serviceManager.parkCar(car);
 
@@ -514,41 +452,52 @@ class ParkingBoyTest {
     void should_throw_unrecognized_parking_ticket_when_assigned_parking_boy_fetch_a_car_given_a_wrong_parking_ticket() {
         ParkingTicket wrongParkingTicket = new ParkingTicket();
 
-        ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(superSmartParkingBoy);
-
         Throwable runtimeException = assertThrows(RuntimeException.class
-                , () -> assignedParkingBoy.fetchCar(wrongParkingTicket));
+                , () -> serviceManager.fetchCar(wrongParkingTicket));
         assertEquals("Unrecognized Parking Ticket " + wrongParkingTicket.hashCode()
                 , runtimeException.getMessage());
     }
 
     @Test
     void should_throw_message_please_provide_your_parking_ticket_when_assigned_parking_boy_fetch_a_car_given_a_no_parking_ticket() {
-        ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(superSmartParkingBoy);
-
         Throwable runtimeException = assertThrows(RuntimeException.class
-                , () -> assignedParkingBoy.fetchCar(null));
+                , () -> serviceManager.fetchCar(null));
         assertEquals("Please provide your parking ticket"
                 , runtimeException.getMessage());
     }
 
     @Test
     void should_throw_not_enough_position_parking_ticket_when_assigned_parking_boy_park_a_car_given_a_no_parking_lot_is_full() {
-        superSmartParkingBoyParkingLot1.setCapacity(10);
-        superSmartParkingBoyParkingLot2.setCapacity(10);
+        superSmartParkingBoyParkingLot1 = new ParkingLot(10);
+        superSmartParkingBoyParkingLot2 = new ParkingLot(10);
         setInitiallyParkedCars(superSmartParkingBoyParkingLot1, 10);
         setInitiallyParkedCars(superSmartParkingBoyParkingLot2, 10);
-
-        ParkingBoy assignedParkingBoy = serviceManager.assignParkingBoy(superSmartParkingBoy);
+        superSmartParkingBoy = new SuperSmartParkingBoy(Arrays.asList(superSmartParkingBoyParkingLot1
+                , superSmartParkingBoyParkingLot2));
+        ServiceManager serviceManager = new ServiceManager(assignedParkingLotsToServiceManager
+                , Collections.singletonList(superSmartParkingBoy));
 
         Throwable runtimeException = assertThrows(RuntimeException.class
-                , () -> assignedParkingBoy.parkCar(new Car()));
+                , () -> serviceManager.assignedPark(new Car()));
         assertEquals("Not enough position"
                 , runtimeException.getMessage());
     }
 
+    @Test
+    void should_return_car_when_service_manager_assigned_to_fetch_car_given_car() {
+        ServiceManager serviceManager = new ServiceManager(assignedParkingLotsToServiceManager
+                , Collections.singletonList(parkingBoy));
+
+        parkingTicket = serviceManager.assignedPark(car);
+        Car fetchedCar = serviceManager.assignedFetch(parkingTicket);
+
+        assertNotNull(parkingTicket);
+        assertSame(car, fetchedCar);
+    }
+
+
     private void setInitiallyParkedCars(ParkingLot parkingLot, int numberOfCarsParked) {
         IntStream.range(0, numberOfCarsParked)
-                .forEach(value -> parkingLot.addCar(new Car()));
+                .forEach(value -> parkingLot.parkCar(new Car()));
     }
 }

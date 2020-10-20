@@ -27,7 +27,7 @@ class ParkingLotTest {
     @Test
     void should_return_avaiable_count_when_getAvailableParkingLotCount_is_called_given_capacity_and_parkedCars() {
         parkingLot = new ParkingLot(3);
-        parkingLot.addCar(new Car());
+        parkingLot.parkCar(new Car());
 
         assertEquals(2, parkingLot.getAvailableParkingLotCount());
     }
@@ -35,7 +35,7 @@ class ParkingLotTest {
     @Test
     void should_return_available_position_rate_when_getLargestAvailablePositonRate_is_called_given_available_count_and_capacity() {
         parkingLot = new ParkingLot(10);
-        parkingLot.addCar(new Car());
+        parkingLot.parkCar(new Car());
 
         BigDecimal largestAvailablePositionRate = parkingLot.getLargestAvailablePositionRate();
 
@@ -46,7 +46,7 @@ class ParkingLotTest {
     void should_park_car_when_parking_lot_add_a_car_given_a_car() {
         Car car = new Car();
 
-        parkingLot.addCar(car);
+        parkingLot.parkCar(car);
 
         assertTrue(parkingLot.getParkedCars().contains(car));
     }

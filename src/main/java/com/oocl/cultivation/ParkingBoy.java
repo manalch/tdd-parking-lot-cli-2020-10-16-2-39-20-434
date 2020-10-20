@@ -3,7 +3,7 @@ package com.oocl.cultivation;
 import java.util.List;
 import java.util.Objects;
 
-public class ParkingBoy implements IParkingStrategy, IFetchingStrategy {
+public class ParkingBoy implements IParkingStrategy {
 
     private List<ParkingLot> parkingLots;
 
@@ -11,19 +11,17 @@ public class ParkingBoy implements IParkingStrategy, IFetchingStrategy {
         this.parkingLots = parkingLots;
     }
 
-    @Override
-    public ParkingTicket parkCar(Car car) {
-        ParkingLot parkingLot = getAvailableParkingLot();
-
-        return parkingLot.addCar(car);
+    public List<ParkingLot> getParkingLots() {
+        return parkingLots;
     }
 
     @Override
-    public ParkingLot getAvailableParkingLot() {
+    public ParkingTicket parkCar(Car car) {
         return parkingLots.stream()
                 .filter(ParkingLot::hasAvailableParkingLot)
                 .findFirst()
-                .orElseThrow(() -> new ParkingException("Not enough position"));
+                .orElseThrow(() -> new ParkingException("Not enough position"))
+                .parkCar(car);
     }
 
     @Override
@@ -35,9 +33,5 @@ public class ParkingBoy implements IParkingStrategy, IFetchingStrategy {
                 .map(parkingLot -> parkingLot.removeCar(parkingTicket))
                 .findAny()
                 .orElseThrow(() -> new ParkingException("Your car is missing"));
-    }
-
-    public List<ParkingLot> getParkingLots() {
-        return parkingLots;
     }
 }
